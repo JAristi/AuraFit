@@ -1,0 +1,142 @@
+<div class="nutrition-container">
+    <!-- Header -->
+    <div class="nutrition-header">
+        <div>
+            <h2>🥗 Mi Nutrición</h2>
+            <p class="subtitle">Control de alimentación diaria</p>
+        </div>
+        <div class="date-selector">
+            <input type="date" [(ngModel)]="selectedDate" (change)="onDateChange()">
+        </div>
+    </div>
+
+    <!-- Macro Counter -->
+    <div class="macro-row">
+        <div class="glass-card macro-card">
+            <div class="macro-icon">🔥</div>
+            <div class="macro-value">{{ totalCalories | number }}</div>
+            <div class="macro-label">Calorías</div>
+        </div>
+        <div class="glass-card macro-card protein-card">
+            <div class="macro-icon">🥩</div>
+            <div class="macro-value">{{ totalProteins | number:'1.1-1' }}g</div>
+            <div class="macro-label">Proteínas</div>
+        </div>
+        <div class="glass-card macro-card carb-card">
+            <div class="macro-icon">🍞</div>
+            <div class="macro-value">{{ totalCarbs | number:'1.1-1' }}g</div>
+            <div class="macro-label">Carbohidratos</div>
+        </div>
+        <div class="glass-card macro-card fat-card">
+            <div class="macro-icon">🥑</div>
+            <div class="macro-value">{{ totalFats | number:'1.1-1' }}g</div>
+            <div class="macro-label">Grasas</div>
+        </div>
+    </div>
+
+    <!-- Meal Form Modal -->
+    <div class="form-overlay" *ngIf="showForm" (click)="closeForm()">
+        <div class="glass-card form-card" (click)="$event.stopPropagation()">
+            <div class="form-header">
+                <h3>{{ editingMeal ? 'Editar Comida' : 'Agregar Comida' }}</h3>
+                <button class="btn-close" (click)="closeForm()">✕</button>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tipo de comida</label>
+                    <select [(ngModel)]="formData.mealType" name="mealType">
+                        <option value="desayuno">🌅 Desayuno</option>
+                        <option value="almuerzo">☀️ Almuerzo</option>
+                        <option value="comida">🌙 Comida</option>
+                        <option value="snack">🍎 Snack</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" [(ngModel)]="formData.name" name="name" placeholder="ej: Ensalada Caesar">
+                </div>
+                <div class="form-group">
+                    <label>Calorías</label>
+                    <input type="number" [(ngModel)]="formData.calories" name="calories" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Proteínas (g)</label>
+                    <input type="number" step="0.1" [(ngModel)]="formData.proteins" name="proteins" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Carbohidratos (g)</label>
+                    <input type="number" step="0.1" [(ngModel)]="formData.carbs" name="carbs" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Grasas (g)</label>
+                    <input type="number" step="0.1" [(ngModel)]="formData.fats" name="fats" placeholder="0">
+                </div>
+                <div class="form-group full-width">
+                    <label>Notas</label>
+                    <input type="text" [(ngModel)]="formData.notes" name="notes"
+                        placeholder="Observaciones opcionales...">
+                </div>
+            </div>
+            <button class="btn-primary btn-save" (click)="saveMeal()">
+                {{ editingMeal ? 'Actualizar' : 'Guardar' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Meals by Type -->
+    <div class="meals-section" *ngIf="!loading">
+        <div class="meal-type-group" *ngFor="let type of getMealTypeKeys()">
+            <div class="meal-type-header">
+                <h3>{{ mealTypeLabels[type] }}</h3>
+                <button class="btn-add" (click)="openAddForm(type)">+ Agregar</button>
+            </div>
+
+            <div class="meal-list" *ngIf="mealsByType[type]?.length > 0">
+                <div class="glass-card meal-item" *ngFor="let meal of mealsByType[type]">
+                    <div class="meal-info">
+                        <span class="meal-name">{{ meal.name }}</span>
+                        <div class="meal-macros">
+                            <span class="macro-chip cal">{{ meal.calories }} cal</span>
+                            <span class="macro-chip pro">P: {{ meal.proteins }}g</span>
+                            <span class="macro-chip carb">C: {{ meal.carbs }}g</span>
+                            <span class="macro-chip fat">G: {{ meal.fats }}g</span>
+                        </div>
+                        <span class="meal-notes" *ngIf="meal.notes">{{ meal.notes }}</span>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="btn-icon" (click)="openEditForm(meal)" title="Editar">✏️</button>
+                        <button class="btn-icon btn-delete" (click)="deleteMeal(meal)" title="Eliminar">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-type" *ngIf="!mealsByType[type] || mealsByType[type].length === 0">
+                <p>Sin registros</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loading">
+        <p>Cargando nutrición...</p>
+    </div>
+
+    <!-- Recommended Recipes -->
+    <div class="recipes-section">
+        <h3 class="section-title">🍳 Recetas Recomendadas</h3>
+        <div class="recipes-grid">
+            <div class="glass-card recipe-card" *ngFor="let recipe of recipes">
+                <div class="recipe-icon">{{ recipe.icon }}</div>
+                <h4>{{ recipe.name }}</h4>
+                <p class="recipe-desc">{{ recipe.description }}</p>
+                <div class="recipe-macros">
+                    <span>{{ recipe.calories }} cal</span>
+                    <span>P: {{ recipe.proteins }}g</span>
+                    <span>C: {{ recipe.carbs }}g</span>
+                    <span>G: {{ recipe.fats }}g</span>
+                </div>
+                <button class="btn-primary btn-recipe" (click)="addRecipeAsMeal(recipe)">Agregar al día</button>
+            </div>
+        </div>
+    </div>
+</div>

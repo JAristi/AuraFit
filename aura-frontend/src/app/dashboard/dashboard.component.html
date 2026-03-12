@@ -1,0 +1,275 @@
+<div class="dashboard-grid">
+    <aside class="sidebar glass-card">
+        <div class="user-profile">
+            <div class="avatar">{{ userInitials }}</div>
+            <h3>{{ user?.name || 'Usuario' }}</h3>
+            <p>{{ user?.email }}</p>
+        </div>
+        <nav class="side-nav">
+            <a routerLink="/dashboard" [class.active]="isActive('/dashboard') && !isActive('/dashboard/progress')"
+                routerLinkActive="" [routerLinkActiveOptions]="{exact: true}">
+                📋 Resumen
+            </a>
+            <a routerLink="/dashboard/progress" [class.active]="isActive('/dashboard/progress')">
+                📊 Progreso
+            </a>
+            <a routerLink="/dashboard/nutrition" [class.active]="isActive('/dashboard/nutrition')">
+                🥗 Mi Nutrición
+            </a>
+            <a href="javascript:void(0)">🏋️ Mi Entrenamiento</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn-logout" (click)="logout()">🚪 Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <main class="dashboard-content">
+        <!-- Default Resumen view when no child route is active -->
+        <div *ngIf="!isActive('/dashboard/progress')">
+            <header class="dash-header">
+                <h2>Panel de Control</h2>
+                <div class="date-chip">{{ today }}</div>
+            </header>
+
+            <div class="stats-overview">
+                <div class="glass-card stat-box">
+                    <span class="label">Calorías Hoy</span>
+                    <span class="value">1,840 / 2,200</span>
+                    <div class="progress-bar">
+                        <div class="fill" style="width: 80%"></div>
+                    </div>
+                </div>
+                <div class="glass-card stat-box">
+                    <span class="label">Agua (L)</span>
+                    <span class="value">2.5 / 3.0</span>
+                    <div class="progress-bar">
+                        <div class="fill" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="plan-details">
+                <div class="glass-card plan-card">
+                    <h3>Entrenamiento de Hoy</h3>
+                    <p>Enfoque: Empuje (Pecho, Hombro, Tríceps)</p>
+                    <ul class="exercise-list">
+                        <li>Press de Banca - 4x10</li>
+                        <li>Elevaciones Laterales - 3x15</li>
+                        <li>Copa de Tríceps - 3x12</li>
+                    </ul>
+                    <button class="btn-primary">Registrar Completado</button>
+                </div>
+
+                <div class="glass-card plan-card">
+                    <h3>Próxima Comida</h3>
+                    <p>Pollo a la plancha con Quinoa y Espárragos</p>
+                    <div class="macros">
+                        <span>P: 40g</span>
+                        <span>C: 30g</span>
+                        <span>G: 10g</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Child route content (Progress, etc.) -->
+        <router-outlet></router-outlet>
+    </main>
+</div>
+
+<style>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+        min-height: calc(100vh - 4rem);
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .sidebar {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+    }
+
+    .user-profile {
+        text-align: center;
+    }
+
+    .user-profile h3 {
+        margin: 0.5rem 0 0.25rem;
+    }
+
+    .user-profile p {
+        color: var(--text-dim);
+        font-size: 0.85rem;
+        margin: 0;
+        word-break: break-all;
+    }
+
+    .avatar {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #000;
+        margin: 0 auto 0.75rem;
+        font-size: 1.2rem;
+    }
+
+    .side-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .side-nav a {
+        text-decoration: none;
+        color: var(--text-dim);
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        transition: all 0.3s;
+        font-size: 0.95rem;
+    }
+
+    .side-nav a.active,
+    .side-nav a:hover {
+        background: rgba(0, 242, 254, 0.08);
+        color: var(--primary);
+    }
+
+    .sidebar-footer {
+        margin-top: auto;
+    }
+
+    .btn-logout {
+        width: 100%;
+        padding: 10px;
+        background: rgba(255, 69, 58, 0.1);
+        border: 1px solid rgba(255, 69, 58, 0.2);
+        color: #ff453a;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+
+    .btn-logout:hover {
+        background: rgba(255, 69, 58, 0.2);
+        border-color: rgba(255, 69, 58, 0.4);
+    }
+
+    .dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .date-chip {
+        background: rgba(0, 242, 254, 0.08);
+        color: var(--primary);
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .stats-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-box {
+        padding: 1.5rem;
+    }
+
+    .label {
+        color: var(--text-dim);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: var(--border-glass);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .progress-bar .fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        border-radius: 3px;
+    }
+
+    .plan-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .plan-card {
+        padding: 2rem;
+    }
+
+    .exercise-list {
+        list-style: none;
+        margin: 1.5rem 0;
+        padding: 0;
+    }
+
+    .exercise-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-glass);
+        color: var(--text-dim);
+    }
+
+    .macros {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .macros span {
+        background: var(--border-glass);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .sidebar {
+            position: static;
+        }
+
+        .plan-details {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

@@ -1,0 +1,48 @@
+<div class="auth-container">
+    <div class="auth-card glass-card">
+        <h2>{{ isLogin ? 'Bienvenido de nuevo' : 'Únete a AURA.fit' }}</h2>
+        <p class="subtitle">{{ isLogin ? 'Ingresa tus credenciales' : 'Crea tu cuenta personalizada' }}</p>
+
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group" *ngIf="!isLogin">
+                <label>Nombre</label>
+                <input type="text" [(ngModel)]="userData.name" name="name" required placeholder="Tu nombre">
+            </div>
+
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" [(ngModel)]="userData.email" name="email" required placeholder="correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" [(ngModel)]="userData.password" name="password" required placeholder="••••••••">
+            </div>
+
+            <div class="form-group" *ngIf="!isLogin">
+                <label>Confirmar Contraseña</label>
+                <input type="password" [(ngModel)]="userData.confirmPassword" name="confirmPassword" required
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary w-full">{{ isLogin ? 'Entrar' : 'Registrarse' }}</button>
+        </form>
+
+        <div class="divider">
+            <span>o</span>
+        </div>
+
+        <div class="google-btn-wrapper">
+            <div #googleBtnContainer id="google-btn-container"></div>
+            <p class="google-loading-text" *ngIf="!googleReady">Cargando Google Sign-In...</p>
+        </div>
+
+
+        <p class="toggle-text">
+            {{ isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?' }}
+            <span (click)="toggleMode()">{{ isLogin ? 'Regístrate aquí' : 'Inicia sesión' }}</span>
+        </p>
+
+        <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </div>
+</div>
