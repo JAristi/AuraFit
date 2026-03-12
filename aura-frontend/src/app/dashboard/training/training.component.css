@@ -1,0 +1,180 @@
+.training-container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Header */
+.training-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.subtitle {
+    color: var(--text-dim);
+    margin: 0.25rem 0 0;
+}
+
+/* Distribution / Splits */
+.section-title {
+    margin: 2rem 0 1rem;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.splits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.split-card {
+    padding: 1.5rem;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 1px solid var(--border-glass);
+}
+
+.split-card:hover, .split-card.active {
+    border-color: var(--primary);
+    background: rgba(0, 242, 254, 0.05);
+    transform: translateY(-4px);
+}
+
+.split-card.active {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.15);
+}
+
+.split-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.split-icon {
+    font-size: 1.5rem;
+}
+
+.split-card h4 {
+    margin: 0;
+    color: #fff;
+}
+
+.split-days {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+}
+
+.muscle-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    background: var(--border-glass);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.split-card.active .tag {
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--primary);
+}
+
+/* Exercise Filters */
+.filter-tabs {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: 8px 20px;
+    border-radius: 20px;
+    background: var(--border-glass);
+    color: var(--text-dim);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.tab:hover, .tab.active {
+    background: var(--primary);
+    color: #000;
+    font-weight: 600;
+}
+
+/* Exercise Grid */
+.exercises-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.exercise-card {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.exercise-img {
+    height: 160px;
+    background: linear-gradient(135deg, #1a1f26, #2d343f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.exercise-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+
+.exercise-content h4 {
+    margin: 0 0 0.5rem;
+}
+
+.exercise-meta {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.meta-item {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+.exercise-desc {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+.btn-select {
+    width: 100%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .training-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

@@ -16,7 +16,9 @@
             <a routerLink="/dashboard/nutrition" [class.active]="isActive('/dashboard/nutrition')">
                 🥗 Mi Nutrición
             </a>
-            <a href="javascript:void(0)">🏋️ Mi Entrenamiento</a>
+            <a routerLink="/dashboard/training" [class.active]="isActive('/dashboard/training')">
+                🏋️ Mi Entrenamiento
+            </a>
         </nav>
         <div class="sidebar-footer">
             <button class="btn-logout" (click)="logout()">🚪 Cerrar Sesión</button>
@@ -34,16 +36,16 @@
             <div class="stats-overview">
                 <div class="glass-card stat-box">
                     <span class="label">Calorías Hoy</span>
-                    <span class="value">1,840 / 2,200</span>
+                    <span class="value">{{ stats.caloriesConsumed | number }} / {{ stats.caloriesGoal | number }}</span>
                     <div class="progress-bar">
-                        <div class="fill" style="width: 80%"></div>
+                        <div class="fill" [style.width.%]="getCaloryPercentage()"></div>
                     </div>
                 </div>
                 <div class="glass-card stat-box">
                     <span class="label">Agua (L)</span>
-                    <span class="value">2.5 / 3.0</span>
+                    <span class="value">{{ stats.waterConsumed }} / {{ stats.waterGoal }}</span>
                     <div class="progress-bar">
-                        <div class="fill" style="width: 75%"></div>
+                        <div class="fill" [style.width.%]="(stats.waterConsumed / stats.waterGoal) * 100"></div>
                     </div>
                 </div>
             </div>
@@ -51,22 +53,20 @@
             <section class="plan-details">
                 <div class="glass-card plan-card">
                     <h3>Entrenamiento de Hoy</h3>
-                    <p>Enfoque: Empuje (Pecho, Hombro, Tríceps)</p>
+                    <p>Enfoque: {{ stats.training.title }}</p>
                     <ul class="exercise-list">
-                        <li>Press de Banca - 4x10</li>
-                        <li>Elevaciones Laterales - 3x15</li>
-                        <li>Copa de Tríceps - 3x12</li>
+                        <li *ngFor="let ex of stats.training.exercises">{{ ex }}</li>
                     </ul>
                     <button class="btn-primary">Registrar Completado</button>
                 </div>
 
                 <div class="glass-card plan-card">
                     <h3>Próxima Comida</h3>
-                    <p>Pollo a la plancha con Quinoa y Espárragos</p>
+                    <p>{{ stats.nextMeal }}</p>
                     <div class="macros">
-                        <span>P: 40g</span>
-                        <span>C: 30g</span>
-                        <span>G: 10g</span>
+                        <span>P: {{ stats.nextMealMacros.p }}g</span>
+                        <span>C: {{ stats.nextMealMacros.c }}g</span>
+                        <span>G: {{ stats.nextMealMacros.g }}g</span>
                     </div>
                 </div>
             </section>

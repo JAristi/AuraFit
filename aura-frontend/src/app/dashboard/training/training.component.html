@@ -1,0 +1,58 @@
+<div class="training-container">
+    <!-- Header -->
+    <div class="training-header">
+        <div>
+            <h2>🏋️ Mi Entrenamiento</h2>
+            <p class="subtitle">Personaliza tu rutina y optimiza tu progreso</p>
+        </div>
+    </div>
+
+    <!-- Distribution / Splits -->
+    <h3 class="section-title">Distribuciones Recomendadas</h3>
+    <div class="splits-grid">
+        <div class="glass-card split-card" 
+             *ngFor="let split of splits"
+             [class.active]="selectedSplit?.id === split.id"
+             (click)="selectSplit(split)">
+            <div class="split-header">
+                <h4>{{ split.name }}</h4>
+                <span class="split-icon">{{ split.icon }}</span>
+            </div>
+            <p class="split-days">{{ split.frequency }}</p>
+            <div class="muscle-tags">
+                <span class="tag" *ngFor="let group of split.muscleGroups">{{ group }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Explorer -->
+    <h3 class="section-title">Explorar Ejercicios</h3>
+    
+    <div class="filter-tabs">
+        <div class="tab" 
+             *ngFor="let cat of categories" 
+             [class.active]="activeCategory === cat"
+             (click)="setCategory(cat)">
+            {{ cat }}
+        </div>
+    </div>
+
+    <div class="exercises-grid">
+        <div class="glass-card exercise-card" *ngFor="let exercise of filteredExercises">
+            <div class="exercise-img">
+                {{ getCategoryIcon(exercise.category) }}
+            </div>
+            <div class="exercise-content">
+                <div class="exercise-meta">
+                    <span class="meta-item">🎯 {{ exercise.muscleGroup }}</span>
+                    <span class="meta-item">⚙️ {{ exercise.equipment }}</span>
+                </div>
+                <h4>{{ exercise.name }}</h4>
+                <p class="exercise-desc">{{ exercise.instructions }}</p>
+                <button class="btn-primary btn-select" (click)="addToWorkout(exercise)">
+                    Agregar a Rutina
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
